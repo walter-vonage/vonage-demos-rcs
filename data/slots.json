@@ -1,0 +1,52 @@
+[
+  {
+    "date": "2025-08-08",
+    "time": "10:00",
+    "available": false,
+    "bookedBy": {
+      "name": "Walter",
+      "email": "",
+      "phone": "447375637447"
+    }
+  },
+  {
+    "date": "2025-08-08",
+    "time": "14:00",
+    "available": true,
+    "bookedBy": {}
+  },
+  {
+    "date": "2025-08-09",
+    "time": "09:00",
+    "available": true,
+    "bookedBy": {}
+  },
+  {
+    "date": "2025-08-28",
+    "time": "13:00",
+    "available": true,
+    "bookedBy": {}
+  },
+  {
+    "date": "2025-08-14",
+    "time": "14:00",
+    "available": true,
+    "bookedBy": {}
+  },
+  {
+    "date": "2025-08-14",
+    "time": "15:00",
+    "available": false,
+    "bookedBy": {
+      "name": "Tom",
+      "email": "",
+      "phone": "447375637447"
+    }
+  },
+  {
+    "date": "2025-08-22",
+    "time": "16:00",
+    "available": true,
+    "bookedBy": {}
+  }
+]
