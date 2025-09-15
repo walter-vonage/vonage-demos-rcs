@@ -58,13 +58,13 @@ async function respondTo(inbound, res) {
         }
 
         //  STOP
-        else if (textLowercase == 'stop') {
+        else if (textLowercase == 'stop' || textLowercase == 'quit' || textLowercase == 'cancel' || textLowercase == 'end' || textLowercase == 'stopall' || textLowercase == 'stop all') {
             const bot = require('../bots/stop')
             await bot.action(inbound, res)
         }
 
-        //  INTRO
-        else if (textLowercase == 'intro' || textLowercase == 'hello' || textLowercase == 'start') {
+        //  VONAGE DEMOS MENU
+        else if (textLowercase == 'demos') {
             const bot = require('../bots/intro')
             await bot.action(inbound, res)
         }
@@ -326,7 +326,7 @@ async function respondTo(inbound, res) {
         }
 
         //  DREAMFORCE
-        else if (replyId == 'dreamforce' || textLowercase == 'dreamforce') {
+        else if (replyId == 'dreamforce' || textLowercase == 'dreamforce' || textLowercase == 'intro' || textLowercase == 'hello' || textLowercase == 'start' || textLowercase == 'startover' || textLowercase == 'start over') {
             const bot = require('../bots/dreamforce/index')
             await bot.showIntro(inbound, res);
         }
@@ -341,6 +341,12 @@ async function respondTo(inbound, res) {
             //  A DATE AND TIME TO BOOK WAS SELECTED
             const bot = require('../bots/dreamforce/index')
             await bot.dateAndTimeSelected(inbound, res)
+        }
+        else {
+            return res.status(200).json({
+                success: false,
+                message: 'Nothing to do'
+            })
         }
         
     }

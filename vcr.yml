@@ -4,12 +4,12 @@ instance:
     name: dev
     runtime: nodejs18
     region: aws.euw1
-    application-id: 1e38efc1-cc18-4c9e-81a4-b119e7162a8c
+    application-id: 88ec05fe-9a76-4e15-a613-5a1490302a07
     entrypoint:
         - node
         - index.js
 debug:
-    application-id: 1e38efc1-cc18-4c9e-81a4-b119e7162a8c
+    application-id: 88ec05fe-9a76-4e15-a613-5a1490302a07
     entrypoint:
         - node
         - index.js

@@ -2,9 +2,10 @@ const RcsUtils = require('../../work/rcs_utils');
 const WEBHOOK = null;
 
 async function action(inbound, res) {
-    const message = `Welcome to this Vonage RCS Demo. To learn more and experience RCS . Please choose one of the below options. At any point during the experience you can type 'START' to come back to the beginning. 
+    let message = `Welcome to this Vonage RCS Demo. To learn more and experience RCS . Please choose one of the below options. At any point during the experience you can type 'START' to come back to the beginning. 
 
 Reply 'STOP' to opt out`
+
     RcsUtils.sendRCSText(inbound.phone, message, WEBHOOK, () => {
         console.log('Welcome text sent')
     }) 

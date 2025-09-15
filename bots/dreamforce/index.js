@@ -12,13 +12,28 @@ async function showIntro(inbound, res) {
     const name = inbound.name;
     const phone = inbound.phone;
 
-    const message = `Hi, ${name}! We're really looking forward to seeing you at Dreamforce!
-    
-Here just some of the exhibition details from Vonage.
+    let message = `Hi, ${name}! we're really looking forward to seeing you at Dreamforce! 
 
-You can access any of the information below as you need, see you soon
+Here are some of the exibition details from Vonage. We will send you to occasional message to update you about the event. If you choose to respond messages will use up data on your device which may be charged.
 
-#TeamVonage`
+At any time you can text help for more information or stop if you'd prefer to opt out.
+
+You can access any of the information below as you need, see you soon.
+
+#TeamVonage`;
+
+    if (name == 'Guest') {
+        message = `"Hello and welcome to the Vonage Events RCS demo Service.
+
+Here you can find out all about RCS and try out the message channel.
+
+Vonage will send you occasional message to update about the event. If you choose to respond messages will use up data on your device which may be charged.
+
+At any time you can text help for more information or stop if you'd prefer to opt out. 
+
+But first here's the menu of options in our RCS carousel. 
+`
+    }
 
     RcsUtils.sendRCSText(phone, message, WEBHOOK, () => {
         console.log('RCS text sent')
@@ -114,6 +129,28 @@ function sendIntroCards(inbound, res) {
                         "postbackData": "ai_photos",
                         "openUrlAction": {
                             "url": "https://www.vonage.com/events/dreamforce/"
+                        }
+                    }
+                },
+            ],
+        },
+        {
+            "title": "Privacy Policy",
+            "description": "Remember you can check our privacy policy anytime",
+            "media": {
+                "height": "TALL",
+                "contentInfo": {
+                    "fileUrl": Config.data.SERVER + "/privacy.jpg",
+                    "forceRefresh": "false"
+                }
+            },
+            "suggestions": [
+                {
+                    "action": {
+                        "text": "View Now",
+                        "postbackData": "view_priv",
+                        "openUrlAction": {
+                            "url": "https://www.vonage.com/legal/privacy-policy/"
                         }
                     }
                 },
