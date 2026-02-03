@@ -1,35 +1,36 @@
 const RcsUtils = require('../../work/rcs_utils');
 const WEBHOOK = null;
 const axios = require('axios');
+const config = require('../../config')
 
 async function action(inbound, res) {
     const cards = [
-        {
-            "title": "RCS Use Cases",
-            "description": "Check out these popular RCS use cases.",
-            "media": {
-                "height": "MEDIUM",
-                "contentInfo": {
-                    "fileUrl": "https://jumper-emea.com/jump-image/ahJofmp1bXBlci0xNDc4MDYtZXVyGAsSC0p1bXBlcmltYWdlGICA0N779_MLDA",
-                    "forceRefresh": "false"
-                }
-            },
-            "suggestions": [
-                {
-                    "reply": {
-                        "text": "Show me",
-                        "postbackData": "rcsinfo_1",
-                    }
-                },
-            ],
-        },
+        // {
+        //     "title": "RCS Use Cases",
+        //     "description": "Check out these popular RCS use cases.",
+        //     "media": {
+        //         "height": "MEDIUM",
+        //         "contentInfo": {
+        //             "fileUrl": config.data.SERVER + "/try_rcs/04.png",
+        //             "forceRefresh": "false"
+        //         }
+        //     },
+        //     "suggestions": [
+        //         {
+        //             "reply": {
+        //                 "text": "Show me",
+        //                 "postbackData": "rcsinfo_1",
+        //             }
+        //         },
+        //     ],
+        // },
         {
             "title": "RCS @ Vonage",
             "description": "Take a look at Vonage can offer with RCS today",
             "media": {
                 "height": "MEDIUM",
                 "contentInfo": {
-                    "fileUrl": "https://jumper-emea.com/jump-image/ahJofmp1bXBlci0xNDc4MDYtZXVyGAsSC0p1bXBlcmltYWdlGICA0P7Ev-ILDA",
+                    "fileUrl": config.data.SERVER + "/try_rcs/03.png",
                     "forceRefresh": "false"
                 }
             },
@@ -51,7 +52,7 @@ async function action(inbound, res) {
             "media": {
                 "height": "MEDIUM",
                 "contentInfo": {
-                    "fileUrl": "https://jumper-emea.com/jump-image/ahJofmp1bXBlci0xNDc4MDYtZXVyGAsSC0p1bXBlcmltYWdlGICA0P6k_ZUIDA",
+                    "fileUrl": config.data.SERVER + "/try_rcs/02.png",
                     "forceRefresh": "false"
                 }
             },
@@ -64,25 +65,25 @@ async function action(inbound, res) {
                 },
             ],
         },
-        {
-            "title": "RCS Benefits",
-            "description": "Drive more engagement and trust through RCS. Check out how.",
-            "media": {
-                "height": "MEDIUM",
-                "contentInfo": {
-                    "fileUrl": "https://jumper-emea.com/jump-image/ahJofmp1bXBlci0xNDc4MDYtZXVyGAsSC0p1bXBlcmltYWdlGICA0Nmc1ZQJDA",
-                    "forceRefresh": "false"
-                }
-            },
-            "suggestions": [
-                {
-                    "reply": {
-                        "text": "Benefits",
-                        "postbackData": "rcsinfo_4",
-                    }
-                },
-            ],
-        },
+        // {
+        //     "title": "RCS Benefits",
+        //     "description": "Drive more engagement and trust through RCS. Check out how.",
+        //     "media": {
+        //         "height": "MEDIUM",
+        //         "contentInfo": {
+        //             "fileUrl": config.data.SERVER + "/try_rcs/01.png",
+        //             "forceRefresh": "false"
+        //         }
+        //     },
+        //     "suggestions": [
+        //         {
+        //             "reply": {
+        //                 "text": "Benefits",
+        //                 "postbackData": "rcsinfo_4",
+        //             }
+        //         },
+        //     ],
+        // },
         
     ]
     RcsUtils.sendRCSCarousel(inbound.phone, cards, WEBHOOK, () => {

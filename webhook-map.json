@@ -1,0 +1,14 @@
+{
+    "447375637447": {
+        "url": "https://webhook.site/83a6eb43-6754-4ec3-92d9-bf211d631273",
+        "method": "POST"
+    },
+    "14155552671": {
+        "url": "https://another-server.com/callback",
+        "method": "POST",
+        "headers": {
+            "Authorization": "Bearer your-token-here",
+            "X-Custom-Header": "value"
+        }
+    }
+}

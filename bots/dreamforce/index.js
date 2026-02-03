@@ -14,24 +14,24 @@ async function showIntro(inbound, res) {
 
     let message = `Hi, ${name}! we're really looking forward to seeing you at Dreamforce! 
 
-Here are some of the exibition details from Vonage. We will send you to occasional message to update you about the event. If you choose to respond messages will use up data on your device which may be charged.
+Here are some of the exibition details from Vonage. We will send you to occasional message to update you about the event. Message and data rates may apply.
 
-At any time you can text help for more information or stop if you'd prefer to opt out.
+At any time you can text HELP for more information or STOP if you'd prefer to opt out.
 
 You can access any of the information below as you need, see you soon.
 
 #TeamVonage`;
 
     if (name == 'Guest') {
-        message = `"Hello and welcome to the Vonage Events RCS demo Service.
+        message = `Hello we're really looking forward to seeing you at Dreamforce!
 
-Here you can find out all about RCS and try out the message channel.
+Here are some of the exhibition details from Vonage. We will send you an occasional message to update you about the event. Message and data rates may apply.
 
-Vonage will send you occasional message to update about the event. If you choose to respond messages will use up data on your device which may be charged.
+At any time you can text help for more information or stop if you'd prefer to opt out.
 
-At any time you can text help for more information or stop if you'd prefer to opt out. 
+You can access any of the information below as you need, see you soon.
 
-But first here's the menu of options in our RCS carousel. 
+#TeamVonage
 `
     }
 

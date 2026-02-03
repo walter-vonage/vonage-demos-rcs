@@ -3,7 +3,7 @@ const WEBHOOK = null;
 const axios = require('axios');
 
 async function action(inbound, res) {
-    const message = `Lets go! What type of messages would you like to see?`
+    const message = `Let's go! What type of messages would you like to see?`
     const buttons = [
         {
             "reply": {
@@ -34,7 +34,7 @@ async function action(inbound, res) {
         },
         {
             "reply": {
-                "text": "Richcards",
+                "text": "Rich cards",
                 "postbackData": "sample_rcs_5",
             }
         },

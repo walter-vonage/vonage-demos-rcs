@@ -8,27 +8,30 @@ const app = express();
 const port = process.env.VCR_PORT || 3000;
 const publicPath = path.join(__dirname, 'public');
 const session = require('express-session');
-const DB = require('./work/db');
 
+const DB = require('./work/db');
 const miscRoutes = require('./work/misc_routes')
 const vonageWork = require('./work/vonage_routes')
 const calendarRoutes = require('./work/calendar_routes')
 const vcrRoutes = require('./work/vcr_routes')
+const WebhookRedirector = require('./work/webhook-redirector');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // Setup EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
 // Serve static files (optional)
 app.use(express.static(publicPath));
+
 // Sessions
 app.use(session({
     secret: 'vonage-super-secret',
     resave: false,
     saveUninitialized: true,
 }));
-
 
 vonageWork.action(app);
 miscRoutes.action(app);
@@ -49,7 +52,6 @@ app.post('/webhook', async (req, res) => {
 
         //  Parse the inbound message and be ready for anything
         const inbound = Utils.parseInbound(req.body);
-
         if (!inbound) {
             return res.status(200).json({
                 success: false,
@@ -57,6 +59,7 @@ app.post('/webhook', async (req, res) => {
             })
         }
 
+        //  Validate the message is for the RCS Agent we have confugured
         if (inbound.to != Config.data.FROM) {
             return res.status(200).json({
                 success: false,
@@ -64,9 +67,20 @@ app.post('/webhook', async (req, res) => {
             })
         }
 
+        //  Get the person's name
         const name = (await DB.getNameByPhone(inbound.phone)) || 'Guest';
         inbound.name = name;
 
+        //  Check if this needs to be redirected to another server
+        const redirected = await WebhookRedirector.redirectIfNeeded(inbound.phone, req.body);
+        if (redirected) {
+            return res.status(200).json({
+                success: true,
+                message: 'Redirected'
+            });
+        }
+
+        //  Analyse and execute
         await Flow.respondTo(inbound, res)
 
     } catch (ex) {

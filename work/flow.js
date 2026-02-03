@@ -30,6 +30,9 @@ async function respondTo(inbound, res) {
     if (matchBakery)        console.log('matchBakery', matchBakery)
     if (matchDreamforce)    console.log('matchDreamforce', matchDreamforce)
 
+    //  Check start from QR code
+    const startFromQrCode = (textLowercase && textLowercase.includes("start") && textLowercase.includes("please send") && textLowercase.includes("get started"));
+
     if (userStatus && userStatus != '') {
 
         if (userStatus == 'ai') {
@@ -326,7 +329,7 @@ async function respondTo(inbound, res) {
         }
 
         //  DREAMFORCE
-        else if (replyId == 'dreamforce' || textLowercase == 'dreamforce' || textLowercase == 'intro' || textLowercase == 'hello' || textLowercase == 'start' || textLowercase == 'startover' || textLowercase == 'start over') {
+        else if (replyId == 'dreamforce' || textLowercase == 'dreamforce' || textLowercase == 'intro' || textLowercase == 'hello' || textLowercase == 'start' || textLowercase == 'startover' || textLowercase == 'start over' || startFromQrCode) {
             const bot = require('../bots/dreamforce/index')
             await bot.showIntro(inbound, res);
         }

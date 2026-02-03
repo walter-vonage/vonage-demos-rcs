@@ -303,32 +303,39 @@ const generateToken = () => {
     }
 }
 
-async function checkNumber(msisdn) {
+async function checkNumber(msisdn, country) {
     // Cache
-    const cached = getFromCache(msisdn);
-    if (cached) return cached;
+    // const cached = getFromCache(msisdn);
+    // if (cached) return cached;
 
     const agentId = Config.data.FROM;
     if (!agentId) {
         return { ok: false, status: 0, error: { message: 'Missing agent id' } };
     }
+    if (!country) {
+        return { ok: false, status: 0, error: { message: 'Missing country ISO code' } };
+    }
 
-    const url = `/v1/channel-manager/rcs/agents/${encodeURIComponent(agentId)}/google/phones/${encodeURIComponent(msisdn)}/capabilities`;
+    const url = `https://api-eu.vonage.com/v1/channel-manager/rcs/agents/${encodeURIComponent(agentId)}/devices/capabilities`;
+    const body = {
+        msisdn, country 
+    };
+
+    const token = generateToken();
 
     // up to 3 tries for 429/5xx
     const maxTries = 3;
     for (let attempt = 1; attempt <= maxTries; attempt++) {
         try {
-            const token = generateToken();
-            const resp = await http.get(url, {
+            const resp = await http.post(url, body, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
                     'Cache-Control': 'no-cache',
-                    'User-Agent': 'VONAGE-RCS/1.0'
+                    'User-Agent': 'VONAGE-RCS/1.0',
+                    'Content-Type': 'application/json'
                 }
             });
-
             if (resp.status >= 200 && resp.status < 300) {
                 const okRes = { ok: true, status: resp.status, data: resp.data };
                 putInCache(msisdn, okRes);
@@ -372,5 +379,6 @@ module.exports = {
     sendLocationShareRequest,
     sendCalendarEntry,
     checkNumber,
+    sendRCS,
 }
 

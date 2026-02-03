@@ -3,6 +3,8 @@ const RcsUtils = require('./rcs_utils');
 const Config = require('../config')
 const DB = require('./db');
 const QRCode = require('qrcode');
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
 function action(app) {
 
@@ -21,6 +23,21 @@ function action(app) {
         } else {
             res.status(200).json({ success: false, message: 'No phone provided' });
         }
+    })
+    
+    // Send RCS message to any number with a custom body
+    app.post('/send', async (req, res) => {
+        if (!req.body) {
+            return res.status(200).json({ 
+                success: false, 
+                message: 'You need to send a Vonage payload for RCS' 
+            });
+        }
+        RcsUtils.sendRCS(req.body, () => {
+            res.status(200).json({ 
+                success: true 
+            });
+        })
     })
 
     // QR generator endpoint from index.ejs
@@ -88,21 +105,39 @@ function action(app) {
 
     // Validate if phone is RCS valid
     //  POST /capability-check
-    //  body: [ '447375637444', '...', '...' ]
-    app.post('/capability-check', async (req, res) => {
+    //  body: CSV file with headers: phone,country
+    app.post('/capability-check', upload.single('csvFile'), async (req, res) => {
         try {
-            const body = req.body;
+            let body = [];
+
+            if (req.file) {
+                // Parse CSV file
+                const csvContent = req.file.buffer.toString('utf-8');
+                const lines = csvContent.split('\n').map(line => line.trim()).filter(line => line);
+                
+                // Skip header row
+                for (let i = 1; i < lines.length; i++) {
+                    const [phone, country] = lines[i].split(',').map(s => s.trim());
+                    if (phone) {
+                        body.push({ phone, country: country || '' });
+                    }
+                }
+            } else {
+                // Fallback to JSON body
+                body = req.body;
+            }
+
             if (!Array.isArray(body) || body.length === 0) {
                 return res.status(400).json({ success: false, message: 'Nothing to check' });
             }
-            const original = body.map(String);
-            const normalized = [...new Set(original.map(normalizeMsisdn).filter(Boolean))];
-          
+
             const CONCURRENCY = 8;
-            const results = await mapWithConcurrency(normalized, CONCURRENCY, async (msisdn) => {
-                const r = await RcsUtils.checkNumber(msisdn);
+
+            const results = await mapWithConcurrency(body, CONCURRENCY, async ({ phone, country }) => {
+                const r = await RcsUtils.checkNumber(phone, country);
                 return {
-                    phone: msisdn,
+                    phone,
+                    country,
                     ok: r.ok,
                     status: r.status,
                     data: r.data,
@@ -112,8 +147,7 @@ function action(app) {
 
             return res.status(200).json({
                 success: true,
-                totalRequested: original.length,
-                uniqueChecked: normalized.length,
+                totalRequested: body.length,
                 results
             });
         }  catch (err) {
@@ -124,6 +158,14 @@ function action(app) {
             });
         }
     })
+
+    // Download CSV template
+    app.get('/capability-check-template', (req, res) => {
+        const csvContent = 'phone,country\n14155552671,US\n447700900000,GB';
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="capability-check-template.csv"');
+        res.send(csvContent);
+    });
     
 }
 
